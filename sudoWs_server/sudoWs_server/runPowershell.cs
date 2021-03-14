@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Collections.Generic;
+using System.Configuration;
 
 public class RunPowershell
 {
@@ -20,7 +21,7 @@ public class RunPowershell
         {
             StartInfo = new ProcessStartInfo
             {
-                FileName = @"C:\Windows\system32\WindowsPowerShell\v1.0\powershell.exe",
+                FileName = ConfigurationManager.AppSettings.Get("powershell"),
                 Arguments = commandLine,
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
@@ -47,7 +48,7 @@ public class RunPowershell
         {
             StartInfo = new ProcessStartInfo
             {
-                FileName = @"C:\Windows\system32\WindowsPowerShell\v1.0\powershell.exe",
+                FileName = ConfigurationManager.AppSettings.Get("powershell"),
                 Arguments = command,
                 UseShellExecute = false,
                 RedirectStandardOutput = true,

@@ -95,8 +95,7 @@ public class Principal
 
                 String commandResult = RunPowershell.RunSudoersCommand(clientCommand);
 
-                // TODO run real powershell command
-                // send command resultat
+                // send command result
                 SslTcpServer.SendCommandResult(sslStream, commandResult);
                 client.Close();
                 listener.Stop();

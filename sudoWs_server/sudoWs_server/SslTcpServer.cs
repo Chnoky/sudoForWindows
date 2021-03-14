@@ -2,16 +2,16 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Net.Security;
-using System.Security.Authentication;
 using System.Text;
 using System.Security.Cryptography.X509Certificates;
+using System.Configuration;
 
 namespace Examples.System.Net
 {
     public sealed class SslTcpServer
     {
-        private static readonly String certificate = @"C:\certificates\server_private.pfx";
-        private static readonly X509Certificate2 serverCertificate = new X509Certificate2(certificate, "Standard-1", X509KeyStorageFlags.MachineKeySet);
+        private static readonly String certificate = ConfigurationManager.AppSettings.Get("certificate");
+        private static readonly X509Certificate2 serverCertificate = new X509Certificate2(certificate, ConfigurationManager.AppSettings.Get("certificate_password"), X509KeyStorageFlags.MachineKeySet);
         // The certificate parameter specifies the name of the file
         // containing the machine certificate.
         public static TcpListener RunServer()

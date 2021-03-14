@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 
 public class GetAuthorization
 {
 	private static List<String[]> ReadPriviledges()
     {
-		string file = System.IO.File.ReadAllText(@"C:\sudoers\sudoers.txt");
+		string file = System.IO.File.ReadAllText(ConfigurationManager.AppSettings.Get("sudoers"));
 		string[] readPriviledges = file.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
 
 		List<String[]> privilegesList = new List<String[]>();
