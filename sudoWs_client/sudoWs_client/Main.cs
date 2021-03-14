@@ -16,9 +16,6 @@ namespace Wsudo_client
 
             String clientCommand = args[0];
 
-            // read settings file
-            Configuration client_cfg = new Configuration();
-
             // connection to server
             SslStream serverConnection = SslTcpClient.RunClient();
             // test connection
@@ -38,7 +35,7 @@ namespace Wsudo_client
             String nonce = GetUserSecurity.GetUserNonce();
 
             // ask for command
-            Boolean commandRequest = SslTcpClient.RequestCommand(serverConnection, clientCommand, nonce, client_cfg);
+            Boolean commandRequest = SslTcpClient.RequestCommand(serverConnection, clientCommand, nonce);
             // test command request
             if (!commandRequest)
             {

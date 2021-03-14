@@ -69,7 +69,7 @@ namespace Examples.System.Net
             }      
         }
 
-        public static bool RequestCommand(SslStream sslStream, String command_requested, String nonce, Configuration cfg)
+        public static bool RequestCommand(SslStream sslStream, String command_requested, String nonce)
         {
             byte[] message = Encoding.UTF8.GetBytes(command_requested + ";" + Environment.UserName + ";" + nonce + "<EOF>");
             // Send command request
@@ -88,7 +88,7 @@ namespace Examples.System.Net
                 case "Password":
                     Console.WriteLine("Command needs administrator password.");
                     CloseConnection(client);
-                    RunPowershell.RunAsAdmin(command_requested, cfg);
+                    RunPowershell.RunAsAdmin(command_requested);
                     return false;
                 case "OK":
                     return true;

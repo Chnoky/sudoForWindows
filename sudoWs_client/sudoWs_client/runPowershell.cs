@@ -1,16 +1,17 @@
 ﻿using System;
+using System.Configuration;
 using System.Diagnostics;
 
 public class RunPowershell
 {
-    public static void RunAsAdmin(String command, Configuration cfg)
+    public static void RunAsAdmin(String command)
 	{
         Process proc = new Process
         {
             StartInfo = new ProcessStartInfo
             {
-                FileName = cfg.GetPowershell(),
-                Arguments = @"Start-Process "+ cfg.GetPowershell() + @" "+ command + @" -Verb runAs",
+                FileName = ConfigurationManager.AppSettings.Get("powershell"),
+                Arguments = @"Start-Process "+ ConfigurationManager.AppSettings.Get("powershell") + @" "+ command + @" -Verb runAs",
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
                 CreateNoWindow = true
