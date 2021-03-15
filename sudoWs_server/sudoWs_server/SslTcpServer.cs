@@ -38,8 +38,7 @@ namespace Examples.System.Net
                 sslStream.ReadTimeout = 5000;
                 sslStream.WriteTimeout = 5000;
 
-                return sslStream;
-                
+                return sslStream; 
             }
             catch
             {

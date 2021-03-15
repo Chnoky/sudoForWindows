@@ -1,25 +1,34 @@
 ﻿using Examples.System.Net;
 using System;
+using System.Configuration;
 using System.Net.Security;
 
 namespace Wsudo_client
 {
     class Principal
     {
-        static int Main(string[] args)
+        public static int Main(string[] args)
         {
-            if (args.Length != 1)
+           
+            if (args.Length == 1 && args[1] != "-h")
             {
-                Console.WriteLine("Usage : wsudo <path to script | command to execute>");
+                return RunMain(args[0]);
+            }
+           else
+            {
+                // print help
+                Console.WriteLine("Usage : sudoWs <path to powershell script | powershell command> \r\n -h print this help \r\n -> Config file is C:\\Program Files\\sudoWs\\client\\sudoWs_client.dll.config");
                 return 1;
             }
 
-            String clientCommand = args[0];
+        }
 
+        private static int RunMain(String clientCommand)
+        {
             // connection to server
             SslStream serverConnection = SslTcpClient.RunClient();
             // test connection
-            if(serverConnection == null)
+            if (serverConnection == null)
             {
                 return 2;
             }

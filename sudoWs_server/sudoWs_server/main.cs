@@ -1,14 +1,29 @@
 ﻿using Examples.System.Net;
 using System;
-using System.Collections.Generic;
+using System.Configuration;
 using System.Net.Security;
 using System.Net.Sockets;
 
 public class Principal
 {
-    public static void Main()
+    public static void Main(string[] args)
+    {      
+        if (args.Length > 0)
+        {
+            // print help
+            Console.WriteLine("Usage : sudoWs : run serveur, must be used as System account \r\n -h : print this help \r\n -> Config file is C:\\Program Files\\sudoWs\\server\\sudoWs_server.dll.config");
+        }
+        else
+        {
+            RunMain();
+        }
+    }
+    
+
+    private static void RunMain()
     {
-        while(true){
+        while (true)
+        {
             // start listening
             while (true)
             {
