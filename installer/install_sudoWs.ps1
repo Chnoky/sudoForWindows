@@ -2,12 +2,31 @@ $sudoWs_path = "C:\Program Files\sudoWs"
 $server_path = "C:\Program Files\sudoWs\server"
 $client_path = "C:\Program Files\sudoWs\client"
 $sudoers_path = "C:\Program Files\sudoWs\sudoers"
+$cert_path = "C:\Program Files\sudoWs\certificate"
 
 ### for debug
 #$sudoWs_path = "C:\test\sudoWs"
 #$server_path = "C:\test\sudoWs\server"
 #$client_path = "C:\test\sudoWs\client"
 #$sudoers_path = "C:\test\sudoWs\sudoers"
+#$cert_path = "C:\test\sudoWs\certificate"
+
+$configFile = $server_path+"\sudoWs_server.dll.config"
+
+
+### Stop server scheduled task ###
+
+Get-ScheduledTask -TaskName "sudoWs_server" -ErrorAction "SilentlyContinue"
+$ret = $?
+
+If($ret){
+	Stop-ScheduledTask -TaskName "sudoWs_server"
+}
+
+Start-Sleep 3
+
+
+### Remove old folders ###
 
 If(Test-Path $server_path){
 	$acl = Get-Acl $server_path
@@ -30,46 +49,51 @@ If(Test-Path $sudoers_path){
 	Set-Acl -Path $sudoers_path -AclObject $acl
 	Remove-Item -Path $sudoers_path -Recurse -Force -ErrorAction "Stop"
 }
+If(Test-Path $cert_path){
+	$acl = Get-Acl $cert_path
+	$rule = New-Object System.Security.AccessControl.FileSystemAccessRule($env:UserName,"FullControl","ContainerInherit,ObjectInherit","None","Allow")
+	$acl.SetAccessRule($rule)
+	Set-Acl -Path $cert_path -AclObject $acl
+	Remove-Item -Path $cert_path -Recurse -Force -ErrorAction "Stop"
+}
+If(Test-Path $sudoWs_path){
+	Remove-Item -Path $sudoWs_path -Force -ErrorAction "Stop"
+}
 
-Remove-Item -Path $sudoWs_path -Force -ErrorAction "Stop"
 
-#New-Item -Path "C:\Program Files\sudoWs" -Type "Directory"
-New-Item -Path "C:\test\sudoWs" -Type "Directory"
+### Create new folders ###
+
+New-Item -Path "C:\Program Files\sudoWs" -Type "Directory"
+#New-Item -Path "C:\test\sudoWs" -Type "Directory"
 Copy-Item -Recurse -Path "./bin/server/" -Destination "$server_path"
 Copy-Item -Recurse -Path "./bin/client/" -Destination "$client_path"
 Copy-Item -Recurse -Path "./bin/sudoers/" -Destination "$sudoers_path"
 
-### remove inheritance on server and sudoers folders
-### set ACL for Administators only
-
-$newAcl = New-Object System.Security.AccessControl.DirectorySecurity
-$newAcl.SetAccessRuleProtection($True, $True)
-$rule = New-Object System.Security.AccessControl.FileSystemAccessRule("BUILTIN\Administrators","ReadAndExecute","ContainerInherit,ObjectInherit","InheritOnly","Allow")
-$newAcl.SetAccessRule($rule)
-Set-Acl -Path $server_path -AclObject $newAcl
-
-$newAcl = New-Object System.Security.AccessControl.DirectorySecurity
-$newAcl.SetAccessRuleProtection($True, $True)
-$rule = New-Object System.Security.AccessControl.FileSystemAccessRule("BUILTIN\Administrators","Read,Write","ContainerInherit,ObjectInherit","InheritOnly","Allow")
-$newAcl.SetAccessRule($rule)
-Set-Acl -Path $sudoers_path -AclObject $newAcl
+New-Item -Path "$cert_path" -Type "Directory"
 
 
-### set ReadAndExecute for Users
 
-$newAcl = New-Object System.Security.AccessControl.DirectorySecurity
-$newAcl.SetAccessRuleProtection($True, $True)
-$rule = New-Object System.Security.AccessControl.FileSystemAccessRule("BUILTIN\Users","ReadAndExecute","ContainerInherit,ObjectInherit","InheritOnly","Allow")
-$newAcl.SetAccessRule($rule)
-$rule = New-Object System.Security.AccessControl.FileSystemAccessRule("BUILTIN\Administrators","FullControl","ContainerInherit,ObjectInherit","InheritOnly","Allow")
-$newAcl.SetAccessRule($rule)
-Set-Acl -Path $client_path -AclObject $newAcl
+
+### Install ###
 
 
 ### generate server certificate
 
 ### TODO ###
 
+$cert = New-SelfSignedCertificate -CertStoreLocation "Cert:\CurrentUser\My" -HashAlgorithm "sha512" -KeyAlgorithm "RSA" -KeyLength "2048" -KeyDescription "sudoWs certificate" -KeyExportPolicy "Exportable" -KeyUsage "CertSign" -Subject "sudoWs" -NotAfter (Get-Date).AddYears(100)
+$fingerPrint = $cert.Thumbprint
+
+$randomPassword =  ("!@#$%^&*0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz".tochararray() | sort {Get-Random})[0..20] -join ''
+
+$encryptedPassword = ConvertTo-SecureString -String $randomPassword -Force -AsPlainText
+
+Export-PfxCertificate -Cert Cert:\currentuser\my\$fingerPrint -FilePath $cert_path\sudoWs_certificate.pfx -Password $encryptedPassword -Force
+
+$xmlConfigFile = Get-Content $configFile
+$xmlConfigFile | ForEach-Object { $_.Replace('<add key="certificate_password" value="none" />', '<add key="certificate_password" value="'+$randomPassword+'" />') } | Set-Content $configFile
+
+Get-Item Cert:\CurrentUser\My\$fingerPrint | Remove-Item
 
 ### configure scheduled task
 
@@ -81,3 +105,42 @@ If($ret){
 }
 
 Register-ScheduledTask -Xml (get-content "./task/server_task.xml" | out-string) -TaskName "sudoWs_server" | Enable-ScheduledTask
+
+
+
+### Set permissions on folders ###
+
+
+### remove inheritance on server, sudoers and certificate folders
+### set ACL for Administators only
+
+$newAcl = New-Object System.Security.AccessControl.DirectorySecurity
+$newAcl.SetAccessRuleProtection($True, $True)
+$rule = New-Object System.Security.AccessControl.FileSystemAccessRule("BUILTIN\Administrators","ReadAndExecute","ContainerInherit,ObjectInherit","None","Allow")
+$newAcl.SetAccessRule($rule)
+Set-Acl -Path $server_path -AclObject $newAcl
+
+$newAcl = New-Object System.Security.AccessControl.DirectorySecurity
+$newAcl.SetAccessRuleProtection($True, $True)
+$rule = New-Object System.Security.AccessControl.FileSystemAccessRule("BUILTIN\Administrators","Read,Write","ContainerInherit,ObjectInherit","None","Allow")
+$newAcl.SetAccessRule($rule)
+Set-Acl -Path $sudoers_path -AclObject $newAcl
+
+$newAcl = New-Object System.Security.AccessControl.DirectorySecurity
+$newAcl.SetAccessRuleProtection($True, $True)
+$rule = New-Object System.Security.AccessControl.FileSystemAccessRule("BUILTIN\Administrators","Read","ContainerInherit,ObjectInherit","None","Allow")
+$newAcl.SetAccessRule($rule)
+Set-Acl -Path $cert_path -AclObject $newAcl
+
+
+### set ReadAndExecute for Users
+
+$newAcl = New-Object System.Security.AccessControl.DirectorySecurity
+$newAcl.SetAccessRuleProtection($True, $True)
+$rule = New-Object System.Security.AccessControl.FileSystemAccessRule("BUILTIN\Users","ReadAndExecute","ContainerInherit,ObjectInherit","None","Allow")
+$newAcl.SetAccessRule($rule)
+$rule = New-Object System.Security.AccessControl.FileSystemAccessRule("BUILTIN\Administrators","FullControl","ContainerInherit,ObjectInherit","None","Allow")
+$newAcl.SetAccessRule($rule)
+Set-Acl -Path $client_path -AclObject $newAcl
+
+
