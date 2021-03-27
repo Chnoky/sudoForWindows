@@ -10,3 +10,6 @@
 ### 3) NOPASSWD : do not prompt administrator password. Other value will ask for adminisrator password
 ###
 ### Format is case sensitive
+###
+### Start here with no empty line. You can add blanck lines with #
+###
