@@ -1,6 +1,5 @@
-﻿using Examples.System.Net;
+﻿using SSLServer;
 using System;
-using System.Configuration;
 using System.Net.Security;
 using System.Net.Sockets;
 

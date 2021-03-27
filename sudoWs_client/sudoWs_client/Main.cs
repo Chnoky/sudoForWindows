@@ -1,6 +1,5 @@
-﻿using Examples.System.Net;
+﻿using SSLClient;
 using System;
-using System.Configuration;
 using System.Net.Security;
 
 namespace Wsudo_client

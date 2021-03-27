@@ -5,12 +5,12 @@ using System.Security.Authentication;
 using System.Text;
 using System.Security.Cryptography.X509Certificates;
 
-namespace Examples.System.Net
+namespace SSLClient
 {
     public class SslTcpClient
     {
         private static readonly string machineName = "localhost";
-        private static readonly string serverName = "localhost";
+        private static readonly string serverName = "sudoWs";
         private static TcpClient client;
 
 

@@ -6,7 +6,7 @@ using System.Text;
 using System.Security.Cryptography.X509Certificates;
 using System.Configuration;
 
-namespace Examples.System.Net
+namespace SSLServer
 {
     public sealed class SslTcpServer
     {
