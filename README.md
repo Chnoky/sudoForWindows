@@ -43,7 +43,7 @@ Next, configure the sudoers file C:\Program Files\sudoWs\sudoers\sudoers.txt to 
 
 <b>HOW TO USE sudoWs ?</b>
 
-In command console or powershell console :
+In command console or powershell console :<br>
 Run "sudoWs.exe <Path to script | Powershell command>"
 <br><br>
 If the args is not in sudoers, execution is denied.<br>
