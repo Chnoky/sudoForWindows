@@ -10,7 +10,7 @@ namespace Wsudo_client
         public static int Main(string[] args)
         {
            
-            if (args.Length == 1 && args[1] != "-h")
+            if (args.Length == 1 && args[0] != "-h")
             {
                 return RunMain(args[0]);
             }
