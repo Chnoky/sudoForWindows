@@ -34,9 +34,18 @@ Contains the server certificate to authenticate the server. Only administrators 
 
 <b>INSTALLATION</b>
 
-Copy or download the whole installer folder and run "install_sudoWs.ps1" powershell script.
-You must run the installer script with a Windows administrator account.
+Get installer from Github : <br>
+You must generate both client and server executable with Visual Studio.<br>
+Then add binaries to "client" and "server" folders in "installer".<br>
 
+Get installer from Github release : <br>
+Donwload "installer.zip" folder then decompress it.<br>
+
+<br><br>
+
+Run "install_sudoWs.ps1" powershell script in "installer" folder on your personnal computer.<br>
+You must run the installer script with a Windows administrator account.<br>
+<br>
 Next, configure the sudoers file C:\Program Files\sudoWs\sudoers\sudoers.txt to allow users or groups to run elevated commands or scripts.
 
 <br><br>
