@@ -94,7 +94,7 @@ New-Item -Path "$cert_path" -Type "Directory"
 $cert = New-SelfSignedCertificate -CertStoreLocation "Cert:\CurrentUser\My" -HashAlgorithm "sha512" -KeyAlgorithm "RSA" -KeyLength "2048" -KeyDescription "sudoWs certificate" -KeyExportPolicy "Exportable" -KeyUsage "CertSign" -Subject "sudoWs" -NotAfter (Get-Date).AddYears(100)
 $fingerPrint = $cert.Thumbprint
 
-$randomPassword =  ("!@#$%^&*0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz".tochararray() | sort {Get-Random})[0..20] -join ''
+$randomPassword =  ("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".tochararray() | sort {Get-Random})[0..50] -join ''
 
 $encryptedPassword = ConvertTo-SecureString -String $randomPassword -Force -AsPlainText
 
