@@ -14,6 +14,16 @@ $cert_path = "C:\Program Files\sudoWs\certificate"
 $configFile = $server_path+"\sudoWs_server.dll.config"
 
 
+### check if current powershell is elevated ###
+
+$current = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
+
+if(!$current.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)){
+	Write-Host "You must run this setup with Administrators rights"
+	exit 127
+}
+
+
 ### Stop server scheduled task ###
 
 Get-ScheduledTask -TaskName "sudoWs_server" -ErrorAction "SilentlyContinue"
