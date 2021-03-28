@@ -38,6 +38,8 @@ public class RunPowershell
             response.Add(line);
         }
 
+        proc.Close();
+
         return response;
 
     }
@@ -64,6 +66,8 @@ public class RunPowershell
             string line = proc.StandardOutput.ReadLine();
             response = response + line + Environment.NewLine;
         }
+
+        proc.Close();
 
         return response;
     }
