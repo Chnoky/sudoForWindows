@@ -39,7 +39,7 @@ You must generate both client and server executable with Visual Studio.<br>
 Then add binaries to "client" and "server" folders in "installer".<br>
 
 Get installer from Github release : <br>
-Donwload "installer.zip" folder then decompress it.<br>
+Download zip installer folder then decompress it.<br>
 
 <br><br>
 
