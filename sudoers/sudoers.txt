@@ -11,5 +11,3 @@
 ###
 ### Format is case sensitive
 ###
-### Start here with no empty line. You can add blanck lines with #
-###
