@@ -114,7 +114,7 @@ If($ret){
 	Unregister-ScheduledTask -TaskName "sudoWs_server" -Confirm:$False
 }
 
-Register-ScheduledTask -Xml (get-content "./task/server_task.xml" | out-string) -TaskName "sudoWs_server" | Enable-ScheduledTask
+Register-ScheduledTask -Xml (get-content "./task/server_task.xml" | out-string) -TaskName "sudoWs_server" | Enable-ScheduledTask | Start-ScheduledTask
 
 
 
