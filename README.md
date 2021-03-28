@@ -53,7 +53,7 @@ Next, configure the sudoers file C:\Program Files\sudoWs\sudoers\sudoers.txt to 
 <b>HOW TO USE sudoWs ?</b>
 
 In command console or powershell console :<br>
-Run "sudoWs.exe <Path to script | Powershell command>"
+Run "sudoWs_client.exe <Path to script | Powershell command>"
 <br><br>
 If the args is not in sudoers, execution is denied.<br>
 If the args is in sudoers but not with NOPASSWD option, UAC for Adminisrator password is prompting.<br>
