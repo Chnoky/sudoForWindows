@@ -1,13 +1,15 @@
-### !!!Please ensure this file is only readable by Windows administrators!!!T
-###This file is the whitelist commands or scripts for sudoWs
+### !!!Please ensure this file is only readable by Windows administrators!!!
+### This file is the whitelist commands or scripts for sudoWs
 ###
 ### Format is the following :
-### [u|g];[username|groupname];[powershell command|path to powershell script];[NOPASSWD]
+### [u|g];[username|groupname];[powershell command|path to powershell script];[|PASSWD|NOPASSWD]
+###
+### HINT : format must match regex ^(u|g);(.*?);(.*);($|NOPASSWD$|PASSWD$)
 ###
 ### 1) u for user, g for group
 ### 2) username if u in 1), group name otherwise
 ### 3) Command or script that will be literally executed in a powershell call
-### 3) NOPASSWD : do not prompt administrator password. Other value will ask for adminisrator password
+### 3) NOPASSWD : do not prompt administrator password. PASSWD or no option will ask for adminisrator password
 ###
 ### Format is case sensitive
 ###

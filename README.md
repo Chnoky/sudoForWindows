@@ -56,5 +56,5 @@ In command console or powershell console :<br>
 Run "sudoWs_client.exe <Path to script | Powershell command>"
 <br><br>
 If the args is not in sudoers, execution is denied.<br>
-If the args is in sudoers but not with NOPASSWD option, UAC for Adminisrator password is prompting.<br>
+If the args is in sudoers with PASSWD (or none) option, UAC for Adminisrator password is prompting.<br>
 If the args is in sudoers with NOPASSWD option, the command or script is run with elevated account (SYSTEM) and the standard output is return.<br>
